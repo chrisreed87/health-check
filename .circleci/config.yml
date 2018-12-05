@@ -14,23 +14,15 @@ jobs:
               py-pip
             pip install \
               docker-compose
-      - restore_cache:
-          keys:
-            - v1-{{ .Branch }}
-          paths:
-            - /caches/health-check.tar
       - run:
-          name: Load Docker image layer cache
+          name: Build application Docker image
           command: |
-            set +o pipefail
-            docker load -i /caches/health-check.tar | true
-      - run:
-          name: Build health-checklication Docker image
-          command: |
-            docker build -t dlvrchris/health-check .
+            docker build -t app .
       - deploy:
-          name: Push health-check Docker image
+          name: Push app Docker image
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login --username dlvrchris --password $DOCKERHUBPW
+              docker tag app "dlvrchris/healthcheck"
               docker push "dlvrchris/healthcheck"
             fi
