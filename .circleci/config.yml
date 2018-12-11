@@ -23,6 +23,6 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker login --username dlvrchris --password $DOCKERHUBPW
-              docker tag app "dlvrchris/healthcheck:${CIRCLE_SHA1}"
-              docker push "dlvrchris/healthcheck:${CIRCLE_SHA1}"
+              docker tag app "dlvrchris/healthcheck:${CIRCLE_BUILD_NUM}"
+              docker push "dlvrchris/healthcheck:${CIRCLE_BUILD_NUM}"
             fi
